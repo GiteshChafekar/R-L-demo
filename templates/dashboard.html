@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Welcome, {{ user.full_name }} 👋</h2>
+    <div class="account-info">
+        <p><strong>Account Number:</strong> {{ user.account_number }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Member since:</strong> {{ user.created_at.strftime('%d %b %Y') }}</p>
+    </div>
+    <p class="subtitle">This is a placeholder dashboard — build out transactions, balance, and transfer features here.</p>
+</div>
+{% endblock %}

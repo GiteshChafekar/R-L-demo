@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Login - SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Log In</h2>
+    <p class="subtitle">Access your account securely.</p>
+    <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required {% if locked_seconds and locked_seconds > 0 %}disabled{% endif %}>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required {% if locked_seconds and locked_seconds > 0 %}disabled{% endif %}>
+        </div>
+        <button type="submit" class="btn-primary" id="loginBtn" {% if locked_seconds and locked_seconds > 0 %}disabled{% endif %}>Log In</button>
+    </form>
+
+    {% if locked_seconds and locked_seconds > 0 %}
+    <div class="lockout-timer">
+        🔒 Account locked. Try again in <span id="countdown">--:--</span>
+    </div>
+    <script>
+        let secondsLeft = {{ locked_seconds }};
+        const countdownEl = document.getElementById("countdown");
+        const loginBtn = document.getElementById("loginBtn");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        function formatTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = s % 60;
+            return `${m}:${sec.toString().padStart(2, "0")}`;
+        }
+
+        countdownEl.textContent = formatTime(secondsLeft);
+
+        const timerInterval = setInterval(() => {
+            secondsLeft--;
+            if (secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                loginBtn.disabled = false;
+                emailInput.disabled = false;
+                passwordInput.disabled = false;
+                document.querySelector(".lockout-timer").textContent = "🔓 You can try logging in again now.";
+            } else {
+                countdownEl.textContent = formatTime(secondsLeft);
+            }
+        }, 1000);
+    </script>
+    {% endif %}
+
+    <p class="switch-link">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+</div>
+{% endblock %}

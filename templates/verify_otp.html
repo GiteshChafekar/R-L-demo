@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Verify OTP - SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Verify Your Email</h2>
+    <p class="subtitle">We sent a 6-digit code to <strong>{{ email }}</strong>. It expires in 10 minutes.</p>
+    <form method="POST" action="{{ url_for('verify_otp') }}">
+        <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" id="otp" name="otp" maxlength="6" pattern="\d{6}" required autofocus>
+        </div>
+        <button type="submit" class="btn-primary">Verify</button>
+    </form>
+    <p class="switch-link">Didn't get the code? <a href="{{ url_for('resend_otp') }}">Resend OTP</a></p>
+</div>
+{% endblock %}
